@@ -289,11 +289,6 @@ class BlePeripheralPlugin : FlutterPlugin, BlePeripheralChannel, ActivityAware {
                 super.onConnectionStateChange(device, status, newState)
                 when (newState) {
                     BluetoothProfile.STATE_CONNECTED -> {
-                        if (device.bondState == BluetoothDevice.BOND_NONE) {
-                            // Wait for bonding
-                            listOfDevicesWaitingForBond.add(device.address)
-                            device.createBond()
-                        } else if (device.bondState == BluetoothDevice.BOND_BONDED) {
                             handler?.post {
                                 gattServer?.connect(device, true)
                             }
@@ -303,7 +298,6 @@ class BlePeripheralPlugin : FlutterPlugin, BlePeripheralChannel, ActivityAware {
                                     device
                                 )
                             }
-                        }
                         onConnectionUpdate(device, status, newState)
                     }
 
